@@ -8,6 +8,17 @@ module MouseExtra
 import Set
 import Native.MouseExtra
 
+{-| This library provides access to all mouse actions.
+In order to do so safely, the context menu has been disabled.
+
+# Button Status
+@docs ButtonCode, buttonsDown
+
+# Wheel
+@docs mouseWheel
+
+-}
+
 
 {-| Type alias to make it clearer what integers are supposed to represent in this library. -}
 type alias ButtonCode = Int
@@ -62,11 +73,12 @@ dropMap f signal =
   Signal.dropRepeats (Signal.map f signal)
 
 
-{-| Set of keys that are currently down. -}
+{-| Set of mouse-buttons that are currently down. -}
 buttonsDown : Signal (Set.Set ButtonCode)
 buttonsDown =
   dropMap .buttonCodes buttonModel
 
 
+{-| Delta values of current mouse wheel action -}
 mouseWheel : Signal (Float, Float)
 mouseWheel = Native.MouseExtra.wheel
