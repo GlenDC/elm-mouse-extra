@@ -32,10 +32,9 @@ Elm.Native.MouseExtra.make = function(localRuntime) {
   }
 
   // Disabling Context Menu (as it interferes with right click)
-  var contextMenu = NS.input('contextmenu', false);
-  localRuntime.addListener([contextMenu.id], node, 'contextmenu', function(e) {
-    e.preventDefault();
-  });
+  node.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+  }, false);
 
   var downs = mouseKeyStream('mousedown', mouseKeyEvent);
   var ups = mouseKeyStream('mouseup', mouseKeyEvent)
@@ -43,6 +42,5 @@ Elm.Native.MouseExtra.make = function(localRuntime) {
   return localRuntime.Native.MouseExtra.values = {
     downs: downs,
     ups: ups,
-    contextMenu: contextMenu,
   };
 };
