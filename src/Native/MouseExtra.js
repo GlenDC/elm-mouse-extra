@@ -15,6 +15,8 @@ Elm.Native.MouseExtra.make = function(localRuntime) {
     : localRuntime.node;
 
   function mouseKeyEvent(event) {
+    event.preventDefault();
+
     return {
       _: {},
       buttonCode: event.button,
@@ -22,6 +24,8 @@ Elm.Native.MouseExtra.make = function(localRuntime) {
   }
 
   function mouseWheelEvent(event) {
+    event.preventDefault();
+
     return Utils.Tuple2(
       event.deltaX,
       event.deltaY
