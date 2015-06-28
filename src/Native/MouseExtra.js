@@ -21,6 +21,13 @@ Elm.Native.MouseExtra.make = function(localRuntime) {
       };
   }
 
+  function mouseWheelEvent(event) {
+    return Utils.Tuple2(
+      event.deltaX,
+      event.deltaY
+      );
+  }
+
   function mouseKeyStream(eventName, handler) {
     var stream = NS.input(eventName, '\0');
 
@@ -39,8 +46,14 @@ Elm.Native.MouseExtra.make = function(localRuntime) {
   var downs = mouseKeyStream('mousedown', mouseKeyEvent);
   var ups = mouseKeyStream('mouseup', mouseKeyEvent)
 
+  var wheel = NS.input('wheel', Utils.Tuple2(0,0));
+  localRuntime.addListener([wheel.id], node, 'wheel', function (e) {
+    localRuntime.notify(wheel.id, mouseWheelEvent(e));
+  });
+
   return localRuntime.Native.MouseExtra.values = {
     downs: downs,
     ups: ups,
+    wheel: wheel,
   };
 };

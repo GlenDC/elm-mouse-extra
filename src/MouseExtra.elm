@@ -1,6 +1,7 @@
 module MouseExtra 
   ( ButtonCode
   , buttonsDown
+  , mouseWheel
   )
   where
 
@@ -13,26 +14,26 @@ type alias ButtonCode = Int
 
 -- MANAGE RAW STREAMS
 
-type alias Model =
-    { buttonCodes : Set.Set ButtonCode
-    }
+type alias ButtonModel =
+  { buttonCodes : Set.Set ButtonCode
+  }
 
 
-empty : Model
-empty =
-    { buttonCodes = Set.empty
-    }
+emptyButtonModel : ButtonModel
+emptyButtonModel =
+  { buttonCodes = Set.empty
+  }
 
 
-type Event = Up EventInfo | Down EventInfo
+type ButtonEvent = Up ButtonEventInfo | Down ButtonEventInfo
 
-type alias EventInfo =
-    { buttonCode : ButtonCode
-    }
+type alias ButtonEventInfo =
+  { buttonCode : ButtonCode
+  }
 
 
-update : Event -> Model -> Model
-update event model =
+buttonUpdate : ButtonEvent -> ButtonModel -> ButtonModel
+buttonUpdate event model =
   case event of
     Down info ->
         { buttonCodes = Set.insert info.buttonCode model.buttonCodes
@@ -43,13 +44,13 @@ update event model =
         }
 
 
-model : Signal Model
-model =
-  Signal.foldp update empty rawEvents
+buttonModel : Signal ButtonModel
+buttonModel =
+  Signal.foldp buttonUpdate emptyButtonModel rawButtonEvents
 
 
-rawEvents : Signal Event
-rawEvents =
+rawButtonEvents : Signal ButtonEvent
+rawButtonEvents =
   Signal.mergeMany
     [ Signal.map Up Native.MouseExtra.ups
     , Signal.map Down Native.MouseExtra.downs
@@ -64,4 +65,8 @@ dropMap f signal =
 {-| Set of keys that are currently down. -}
 buttonsDown : Signal (Set.Set ButtonCode)
 buttonsDown =
-  dropMap .buttonCodes model
+  dropMap .buttonCodes buttonModel
+
+
+mouseWheel : Signal (Float, Float)
+mouseWheel = Native.MouseExtra.wheel
