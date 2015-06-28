@@ -5,9 +5,6 @@ module MouseExtra
   )
   where
 
-import Set
-import Native.MouseExtra
-
 {-| This library provides access to all mouse actions.
 In order to do so safely, the context menu has been disabled.
 
@@ -18,6 +15,9 @@ In order to do so safely, the context menu has been disabled.
 @docs mouseWheel
 
 -}
+
+import Set
+import Native.MouseExtra
 
 
 {-| Type alias to make it clearer what integers are supposed to represent in this library. -}
